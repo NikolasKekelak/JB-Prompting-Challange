@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Senior Developer Portfolio</title>
+  <meta name="description" content="Portfolio of a senior developer with 30+ years of experience across Google, Amazon, and JetBrains." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=Roboto+Slab:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="brand">
+    <div class="cog" aria-hidden="true"></div>
+    <h1>Personal Portfolio</h1>
+    <p class="tag">Senior Developer • 30+ Years</p>
+  </div>
+
+  <nav class="tabs" role="tablist" aria-label="Primary">
+    <button role="tab" aria-selected="true" aria-controls="tab-about" id="tabbtn-about" class="tab-btn spark-zone">About</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-projects" id="tabbtn-projects" class="tab-btn spark-zone">Projects</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-experience" id="tabbtn-experience" class="tab-btn spark-zone">Experience</button>
+  </nav>
+</header>
+
+<main class="content">
+  <!-- ABOUT TAB -->
+  <section id="tab-about" role="tabpanel" aria-labelledby="tabbtn-about" class="tab-panel is-active">
+    <div class="about">
+      <div class="profile">
+        <img 
+          src="https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg" 
+          alt="Professional portrait of a senior male software engineer in his mid‑50s" />
+        <div class="contact card">
+          <h3 class="accent spark-zone">Contact</h3>
+          <ul>
+            <li><span class="label">Email:</span> <a href="mailto:senior.dev@example.com">senior.dev@example.com</a></li>
+            <li><span class="label">Phone:</span> <a href="tel:+1234567890">+1 (234) 567‑890</a></li>
+            <li><span class="label">Location:</span> Earth, Remote‑friendly</li>
+            <li><span class="label">Languages:</span> Fluent in English, Spanish, and German</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bio card">
+        <h2 class="accent spark-zone">Hello, I’m a Senior Developer</h2>
+        <p>
+          Senior software engineer with 30+ years of experience delivering resilient, scalable systems in
+          world‑class engineering organizations. I specialize in building robust platforms, elevating engineering
+          practices, and mentoring teams to consistently deliver high‑quality outcomes.
+        </p>
+        <div class="timeline">
+          <div class="entry">
+            <div class="when">Early career</div>
+            <div class="what">
+              Started as an intern at <strong>Google</strong>, where I spent 5 years honing my craft and growing from a
+              junior programmer into a well‑rounded engineer.
+            </div>
+          </div>
+          <div class="entry">
+            <div class="when">Mid career</div>
+            <div class="what">
+              After a year of personal projects and travel, I joined <strong>Amazon</strong>. I led multiple teams and
+              delivered complex initiatives as a Team Lead across various projects.
+            </div>
+          </div>
+          <div class="entry">
+            <div class="when">2012 → present</div>
+            <div class="what">
+              Joined <strong>JetBrains</strong> to work on <strong>WebStorm</strong>, crafting developer‑centric
+              features to help our users ship better software faster.
+            </div>
+          </div>
+        </div>
+
+        <div class="skills">
+          <div class="pill spark-zone">C#</div>
+          <div class="pill spark-zone">Java</div>
+          <div class="pill spark-zone">Kotlin</div>
+          <div class="pill spark-zone">Python</div>
+        </div>
+
+        <p>
+          Professional strengths: deep expertise across C#, Java, Kotlin, and Python; proven track record of
+          collaborative leadership, mentoring, and fostering benevolent, high‑trust team cultures; and a consistent
+          focus on code quality, reliability, and measurable business impact.
+        </p>
+
+        <div class="hobbies card">
+          <h3 class="accent spark-zone">Beyond the keyboard</h3>
+          <p>
+            I practice algorithmic problem‑solving on LeetCode daily. Outside of work, I enjoy hiking, fishing, and
+            gaming, and I value time spent with colleagues and friends.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS TAB -->
+  <section id="tab-projects" role="tabpanel" aria-labelledby="tabbtn-projects" class="tab-panel" hidden>
+    <div class="panel-inner card">
+      <h2 class="accent spark-zone">Personal Projects</h2>
+      <ul class="project-list">
+        <li class="project">
+          <h3>Steampunk Task Tracker</h3>
+          <p>A minimalist task tracker with a brass‑and‑cog UI theme and keyboard‑first navigation.</p>
+          <div class="tech">Kotlin • Ktor • Vanilla JS</div>
+        </li>
+        <li class="project">
+          <h3>Data Pipeline Sandbox</h3>
+          <p>Explorations of resilient ETL patterns with backpressure and idempotency.</p>
+          <div class="tech">Python • Apache Beam</div>
+        </li>
+        <li class="project">
+          <h3>Code Kata Vault</h3>
+          <p>My personal archive of coding challenges and daily LeetCode practice.</p>
+          <div class="tech">Java • JUnit • JS</div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE TAB -->
+  <section id="tab-experience" role="tabpanel" aria-labelledby="tabbtn-experience" class="tab-panel" hidden>
+    <div class="panel-inner card">
+      <h2 class="accent spark-zone">Professional Experience</h2>
+      <ul class="xp">
+        <li>
+          <div class="role">Team Lead / Senior Developer</div>
+          <div class="company">JetBrains – WebStorm</div>
+          <div class="time">2012 – Present</div>
+          <p>Designing and shipping beloved editor features. Mentoring teams and driving quality at scale.</p>
+        </li>
+        <li>
+          <div class="role">Team Lead</div>
+          <div class="company">Amazon</div>
+          <div class="time">2006 – 2011</div>
+          <p>Led cross‑functional teams to deliver high‑availability services powering global commerce.</p>
+        </li>
+        <li>
+          <div class="role">Software Engineer</div>
+          <div class="company">Google</div>
+          <div class="time">2000 – 2005</div>
+          <p>Contributed to large‑scale systems; developed solid engineering foundations and best practices.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="pipes" aria-hidden="true"></div>
+  <p>© <span id="year"></span> Senior Developer Portfolio. Built with HTML, CSS, and JS.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
