@@ -11,6 +11,11 @@
   const closeBtn = document.getElementById('closeOverlay');
   const chosenNameEl = document.getElementById('chosenName');
   const announceEl = document.getElementById('announcement');
+  const overlayTitle = document.getElementById('resultTitle');
+  const overlayActions = overlay.querySelector('.overlay-actions');
+
+  const { AppState, AppConfig, Timer } = window;
+  const S = AppState?.States || {};
 
   // Define destinations (label and relative path)
   const DESTS = [
@@ -120,11 +125,11 @@
     return text.slice(0, Math.max(1, maxChars-1)) + '…';
   }
 
-  // Spin logic
-  function spin(){
-    if(spinning) return;
+  // Spin logic (FSM + YAML-configurable duration)
+  async function spin(){
+    if(AppState.get() !== S.READY) return; // allowed only in READY
+    AppState.set(S.SPINNING);
     spinning = true;
-    spinBtn.disabled = true;
     goBtn.disabled = true;
     chosenNameEl.textContent = '—';
     hideOverlay();
@@ -141,7 +146,10 @@
 
     const startRot = rotation;
     const delta = normalizeAngle(targetRotation - startRot);
-    const duration = 3800 + Math.random()*1200; // 3.8s .. 5s
+
+    // Baseline (current implementation) duration range: 3.8s .. 5s
+    const baseline = 3800 + Math.random()*1200;
+    const duration = await AppConfig.getSpinMs(()=>baseline);
     const start = performance.now();
 
     function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
@@ -159,6 +167,7 @@
         chosenNameEl.textContent = dest.label;
         announce(`${dest.label} selected. Use Go to Website to open it.`);
         goBtn.disabled = false;
+        AppState.set(S.RESULT_SHOWN);
         showOverlay();
         goBtn.focus();
       }
@@ -179,28 +188,92 @@
   function showOverlay(){ overlay.hidden = false; }
   function hideOverlay(){ overlay.hidden = true; }
 
+  function setActionsVisible(v){ overlayActions.style.display = v ? '' : 'none'; }
+
+  function formatSeconds(s){
+    const m = Math.floor(s/60);
+    const sec = Math.floor(s%60);
+    const mm = String(m).padStart(2,'0');
+    const ss = String(sec).padStart(2,'0');
+    return `${mm}:${ss}`;
+  }
+
+  function updateUIByState(state){
+    // Spin button enabled only in READY
+    spinBtn.disabled = state !== S.READY;
+    switch(state){
+      case S.SPINNING:
+        // ensure overlay hidden while spinning
+        hideOverlay();
+        break;
+      case S.RESULT_SHOWN:
+        overlayTitle.textContent = 'Selected';
+        setActionsVisible(true);
+        showOverlay();
+        break;
+      case S.SHOWCASE:
+        overlayTitle.textContent = 'Website showcase';
+        setActionsVisible(false);
+        showOverlay();
+        break;
+      case S.PAUSE:
+        overlayTitle.textContent = 'Pause';
+        setActionsVisible(false);
+        showOverlay();
+        break;
+      case S.PREPARE:
+        overlayTitle.textContent = 'Prepare yourself';
+        setActionsVisible(false);
+        showOverlay();
+        break;
+      case S.PROMPT:
+        // we navigate away right after entering PROMPT
+        break;
+      case S.FINISHED:
+        setActionsVisible(false);
+        break;
+    }
+  }
+
+  // Sequence after Go → SHOWCASE → PAUSE → PREPARE → PROMPT (redirect)
+  async function startCompetitionFlow(){
+    if(AppState.get() !== S.RESULT_SHOWN) return;
+    // Navigate in the same tab to a showcase wrapper that loads the site and shows the timer overlay
+    const dest = selectedIndex >= 0 ? DESTS[selectedIndex] : null;
+    AppState.set(S.SHOWCASE);
+    try{ Timer.cancel(); }catch(_){ }
+    const path = dest ? dest.path : '';
+    const url = `showcase.html?path=${encodeURIComponent(path)}`;
+    window.location.href = url;
+  }
+
   // Events
-  spinBtn.addEventListener('click', spin);
+  spinBtn.addEventListener('click', debounce(spin, 400));
   spinBtn.addEventListener('keydown', (e)=>{
     if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); spin(); }
   });
 
-  goBtn.addEventListener('click', ()=>{
-    if(selectedIndex>=0){ window.location.href = DESTS[selectedIndex].path; }
-  });
+  goBtn.addEventListener('click', debounce(()=>{
+    if(AppState.get() === S.RESULT_SHOWN){ startCompetitionFlow(); }
+  }, 400));
 
   closeBtn.addEventListener('click', ()=>{
+    // Do not change state; remain RESULT_SHOWN so spin stays disabled
     hideOverlay();
-    spinBtn.focus();
   });
 
   overlay.addEventListener('keydown', (e)=>{
-    if(e.key === 'Escape'){ e.preventDefault(); hideOverlay(); spinBtn.focus(); }
+    if(e.key === 'Escape'){ e.preventDefault(); hideOverlay(); }
   });
 
+  // React to state changes for UI
+  AppState.subscribe(updateUIByState);
+
   window.addEventListener('resize', ()=>{ sizeCanvas(); draw(); });
+  window.addEventListener('beforeunload', ()=>{ try{ Timer.cancel(); }catch(_){} });
 
   // initial setup
   sizeCanvas();
   draw();
+  updateUIByState(AppState.get());
 })();

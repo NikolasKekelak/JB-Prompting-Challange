@@ -1,0 +1,16 @@
+timings:
+  # If provided, this value is used as the spin duration in milliseconds
+  # If missing, code will fallback to (currentDuration + 2000)
+  # spinMs: 7000
+
+  # Showcase phase length in seconds
+  showcaseSeconds: 30
+
+  # Pause phase length in seconds
+  pauseSeconds: 5
+
+  # Prepare phase length in seconds
+  prepareSeconds: 30
+
+  # Prompt phase length in minutes
+  promptMinutes: 5
